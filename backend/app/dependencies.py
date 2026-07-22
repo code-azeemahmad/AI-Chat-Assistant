@@ -7,25 +7,16 @@ from app.providers.base import LLMProvider
 from app.providers.ollama_provider import OllamaProvider
 from app.core.config import settings
 from app.services.chat_service import ChatService
+from fastapi import Request
 
+def get_http_client(
+    request: Request,
+) -> httpx.AsyncClient:
 
-def get_http_client() -> httpx.AsyncClient:
-    """
-    Factory for Async HTTP client.
-    """
-
-    timeout = httpx.Timeout(
-        connect=5.0,
-        read=settings.request_timeout,
-        write=5.0,
-        pool=5.0,
-    )
-
-    return httpx.AsyncClient(timeout=timeout)
-
+    return request.app.state.http_client
 
 def get_llm_provider(
-    client: httpx.AsyncClient,
+    client: httpx.AsyncClient = Depends(get_http_client),
 ) -> LLMProvider:
     """
     Return the configured LLM provider.

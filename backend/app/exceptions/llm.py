@@ -43,3 +43,7 @@ class LLMProviderError(LLMError):
     """
     Raised for any other provider-side error.
     """
+    
+    
+class UnsupportedProviderError(LLMError):
+    """Raised when an unknown LLM provider is configured."""

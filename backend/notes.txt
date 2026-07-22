@@ -51,3 +51,53 @@ Know about routers
 
 _______________________________________________________
 
+Improved Architecture
+                 Router
+                    │
+                    ▼
+              ChatService
+                    │
+                    ▼
+            ProviderFactory
+                    │
+          ┌─────────┼─────────┐
+          ▼         ▼         ▼
+     Ollama   OpenAI   Gemini
+          │
+          ▼
+     LLMProvider
+
+Notice:
+
+The service never knows which provider exists.
+The factory chooses.
+
+_______________________________________________________
+
+Dependency Injection Flow
+
+FastAPI builds the dependency graph automatically.
+
+Request
+
+↓
+
+Router
+
+↓
+
+Depends(get_chat_service)
+
+↓
+
+Depends(get_llm_provider)
+
+↓
+
+Depends(get_http_client)
+
+↓
+
+AsyncClient
+
+_______________________________________________________

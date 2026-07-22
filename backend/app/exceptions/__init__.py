@@ -6,6 +6,7 @@ from .llm import (
     LLMRateLimitError,
     LLMResponseError,
     LLMTimeoutError,
+    UnsupportedProviderError,
 )
 
 __all__ = [
@@ -16,4 +17,5 @@ __all__ = [
     "LLMRateLimitError",
     "LLMResponseError",
     "LLMProviderError",
+    "UnsupportedProviderError"
 ]

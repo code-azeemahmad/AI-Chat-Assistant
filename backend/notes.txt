@@ -1,0 +1,53 @@
+Depend on abstractions, not implementations.
+
+                Router
+                   │
+                   ▼
+             ChatService
+                   │
+                   ▼
+          LLMProvider (ABC)
+                   │
+     ┌─────────────┼─────────────┐
+     ▼             ▼             ▼
+OllamaProvider OpenAIProvider GeminiProvider
+
+
+Notice that ChatService depends only on the interface.
+
+_______________________________________________________
+
+Conceptually, every provider should answer this question:
+
+"Given a list of chat messages and generation parameters, produce a response."
+
+It doesn't matter whether that provider talks to:
+
+Ollama
+OpenAI
+Gemini
+Claude
+
+The service interacts with them the same way.
+
+_______________________________________________________
+
+Responsibilities of OllamaProvider
+
+Only four responsibilities:
+
+Convert ChatRequest → Ollama request
+Call Ollama
+Convert Ollama response → ChatResponse
+Raise meaningful exceptions
+
+It must not:
+
+Save messages
+Build prompts
+Perform authentication
+Know about FastAPI
+Know about routers
+
+_______________________________________________________
+

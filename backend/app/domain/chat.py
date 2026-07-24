@@ -1,7 +1,9 @@
 # backend/app/domain/chat.py
 from enum import StrEnum
+
 from app.core.config import settings
 from pydantic import BaseModel, ConfigDict, Field
+
 
 class ChatRole(StrEnum):
     SYSTEM = "system"

@@ -2,21 +2,13 @@
 from __future__ import annotations
 
 import httpx
-
+from app.core.config import settings
 from app.domain.chat import (
     ChatMessage,
     ChatRequest,
     ChatResponse,
     TokenUsage,
 )
-from app.providers.base import LLMProvider
-from app.providers.ollama_models import (
-    OllamaChatRequest,
-    OllamaChatResponse,
-    OllamaMessage,
-    OllamaOptions,
-)
-from app.core.config import settings
 from app.exceptions.llm import (
     LLMAuthenticationError,
     LLMConnectionError,
@@ -24,6 +16,13 @@ from app.exceptions.llm import (
     LLMRateLimitError,
     LLMResponseError,
     LLMTimeoutError,
+)
+from app.providers.base import LLMProvider
+from app.providers.ollama_models import (
+    OllamaChatRequest,
+    OllamaChatResponse,
+    OllamaMessage,
+    OllamaOptions,
 )
 
 

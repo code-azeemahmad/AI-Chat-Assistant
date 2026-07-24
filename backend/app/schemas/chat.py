@@ -1,5 +1,6 @@
 # app/schemas/chat.py
 from enum import Enum
+
 from app.core.config import settings
 from pydantic import BaseModel, Field
 

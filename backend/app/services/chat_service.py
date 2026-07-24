@@ -1,13 +1,13 @@
 # app/services/chat_service.py
 from __future__ import annotations
 
+from app.core.logging import logger
 from app.domain.chat import (
     ChatRequest,
     ChatResponse,
 )
-from app.providers.base import LLMProvider
-from app.core.logging import logger
 from app.exceptions.llm import LLMError
+from app.providers.base import LLMProvider
 
 
 class ChatService:

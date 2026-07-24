@@ -59,13 +59,18 @@ class OllamaResponseMessage(BaseModel):
 class OllamaChatResponse(BaseModel):
     """
     Response returned by POST /api/chat.
+
+    Used for both:
+    - Non-streaming responses
+    - Streaming chunks
     """
 
     model: str
 
     created_at: str
 
-    message: OllamaResponseMessage
+    # Optional because the final streaming chunk may not contain a message.
+    message: OllamaResponseMessage | None = None
 
     done: bool
 

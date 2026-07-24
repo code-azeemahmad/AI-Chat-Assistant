@@ -1,28 +1,45 @@
-# app/core/lifespan.py
+import logging
 from contextlib import asynccontextmanager
 
 import httpx
+from app.core.config import settings
 from fastapi import FastAPI
 
-from app.core.config import settings
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
-    Shared AsyncClient
+    Application lifespan.
+
+    Creates a shared AsyncClient on startup and
+    gracefully closes it on shutdown.
     """
+
+    logger.info("Starting AI Chat Backend...")
+
     timeout = httpx.Timeout(
-        connect=5,
+        connect=5.0,
         read=settings.request_timeout,
-        write=5,
-        pool=5,
+        write=5.0,
+        pool=5.0,
     )
 
-    app.state.http_client = httpx.AsyncClient(
-        timeout=timeout
-    )
+    try:
+        app.state.http_client = httpx.AsyncClient(
+            timeout=timeout,
+        )
 
-    yield
+        logger.info("Shared AsyncClient initialized successfully.")
 
-    await app.state.http_client.aclose()
+        yield
+
+    finally:
+        logger.info("Closing shared AsyncClient...")
+
+        await app.state.http_client.aclose()
+
+        logger.info("Shared AsyncClient closed successfully.")
+
+        logger.info("AI Chat Backend stopped.")

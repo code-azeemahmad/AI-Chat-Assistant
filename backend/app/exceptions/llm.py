@@ -47,3 +47,4 @@ class LLMProviderError(LLMError):
     
 class UnsupportedProviderError(LLMError):
     """Raised when an unknown LLM provider is configured."""
+    

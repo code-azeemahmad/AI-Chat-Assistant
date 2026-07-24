@@ -10,12 +10,12 @@ from .llm import (
 )
 
 __all__ = [
-    "LLMError",
-    "LLMConnectionError",
-    "LLMTimeoutError",
     "LLMAuthenticationError",
+    "LLMConnectionError",
+    "LLMError",
+    "LLMProviderError",
     "LLMRateLimitError",
     "LLMResponseError",
-    "LLMProviderError",
+    "LLMTimeoutError",
     "UnsupportedProviderError"
 ]

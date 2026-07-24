@@ -101,3 +101,108 @@ Depends(get_http_client)
 AsyncClient
 
 _______________________________________________________
+
+New Dependency Graph
+Request
+      │
+      ▼
+Router
+      │
+      ▼
+Depends(get_chat_service)
+      │
+      ▼
+Depends(get_llm_provider)
+      │
+      ▼
+Depends(get_http_client)
+      │
+      ▼
+request.app.state.http_client
+
+No object is created per request.
+
+After These Two Changes
+
+Your architecture becomes:
+
+HTTP
+
+↓
+
+Schemas
+
+↓
+
+Domain
+
+↓
+
+Service
+
+↓
+
+Provider
+
+↓
+
+Provider Models
+
+↓
+
+HTTP Client
+
+↓
+
+Ollama
+
+This is a very clean separation of concerns.
+
+_______________________________________________________
+
+__Introduce mapper__
+
+request_schema
+        │
+        ▼
+ChatMapper.to_domain()
+        │
+        ▼
+service.chat()
+        │
+        ▼
+ChatMapper.to_schema()
+
+Establish the Schema ↔ Domain conversion layer
+
+_______________________________________________________
+
+                    FastAPI Application
+                           │
+          ┌────────────────┴────────────────┐
+          │                                 │
+          ▼                                 ▼
+   Exception Handlers                  Lifespan
+          │                                 │
+          ▼                                 ▼
+      API Routers                    Shared AsyncClient
+          │
+          ▼
+     Chat Router
+          │
+          ▼
+     Chat Mapper
+          │
+          ▼
+     ChatService
+          │
+          ▼
+     LLMProvider
+          │
+          ▼
+    OllamaProvider
+          │
+          ▼
+     Ollama Server
+
+_______________________________________________________

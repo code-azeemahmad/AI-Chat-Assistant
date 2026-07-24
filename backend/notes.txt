@@ -206,3 +206,30 @@ _______________________________________________________
      Ollama Server
 
 _______________________________________________________
+
+good software engineering principles.
+                    HTTP
+                      │
+                      ▼
+             FastAPI Router
+                      │
+                 Chat Mapper
+                      │
+                      ▼
+                Domain Models
+                      │
+                 Chat Service
+                      │
+                 LLMProvider
+                      │
+         ┌────────────┴────────────┐
+         ▼                         ▼
+   OllamaProvider          Future Providers
+         │
+     Ollama Models
+         │
+      httpx Client
+         │
+       Ollama API
+
+_______________________________________________________

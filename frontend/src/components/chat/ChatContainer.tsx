@@ -1,5 +1,4 @@
-// src/components/chat/ChatContainer.tsx
-
+// src\components\chat\ChatContainer.tsx
 import { useChatStore } from "../../store/chat";
 import { useAutoScroll } from "../../hooks/useAutoScroll";
 
@@ -14,6 +13,9 @@ export default function ChatContainer() {
         sendMessage,
     } = useChatStore();
 
+    const lastMessage =
+        messages[messages.length - 1];
+
     const {
         containerRef,
         bottomRef,
@@ -21,7 +23,9 @@ export default function ChatContainer() {
         handleScroll,
         scrollToBottom,
         enableAutoScroll,
-    } = useAutoScroll(messages);
+    } = useAutoScroll(
+        `${lastMessage?.id ?? ""}:${lastMessage?.content.length ?? 0}`,
+    );
 
     return (
         <div className="relative flex h-full flex-col">
@@ -41,7 +45,7 @@ export default function ChatContainer() {
                 <ScrollToLatestButton
                     onClick={() => {
                         enableAutoScroll();
-                        scrollToBottom();
+                        scrollToBottom("smooth");
                     }}
                 />
             )}

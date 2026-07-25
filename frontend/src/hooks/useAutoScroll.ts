@@ -1,80 +1,56 @@
-// src/hooks/useAutoScroll.ts
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import {
-    useCallback,
-    useEffect,
-    useRef,
-    useState,
-} from "react";
+const SCROLL_THRESHOLD = 120;
 
-const SCROLL_THRESHOLD = 100;
+export function useAutoScroll(dependency: unknown) {
+  const containerRef = useRef<HTMLDivElement>(null);
 
-export function useAutoScroll(
-    dependency: unknown,
-) {
-    const containerRef =
-        useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
-    const bottomRef =
-        useRef<HTMLDivElement>(null);
+  const [autoScroll, setAutoScroll] = useState(true);
 
-    const [
-        autoScroll,
-        setAutoScroll,
-    ] = useState(true);
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = "auto") => {
+    requestAnimationFrame(() => {
+      bottomRef.current?.scrollIntoView({
+        behavior,
+        block: "end",
+      });
+    });
+  }, []);
 
-    const scrollToBottom =
-        useCallback(
-            (
-                behavior: ScrollBehavior = "smooth",
-            ) => {
-                bottomRef.current?.scrollIntoView({
-                    behavior,
-                    block: "end",
-                });
-            },
-            [],
-        );
+  const handleScroll = useCallback(() => {
+    const container = containerRef.current;
 
-    const handleScroll =
-        useCallback(() => {
-            const container =
-                containerRef.current;
+    if (!container) {
+      return;
+    }
 
-            if (!container) {
-                return;
-            }
+    const distance =
+      container.scrollHeight - container.scrollTop - container.clientHeight;
 
-            const distance =
-                container.scrollHeight -
-                container.scrollTop -
-                container.clientHeight;
+    setAutoScroll(distance < SCROLL_THRESHOLD);
+  }, []);
 
-            setAutoScroll(
-                distance <=
-                    SCROLL_THRESHOLD,
-            );
-        }, []);
+  useEffect(() => {
+    if (!autoScroll) {
+      return;
+    }
 
-    useEffect(() => {
-        if (!autoScroll) {
-            return;
-        }
+    requestAnimationFrame(() => {
+      scrollToBottom("auto");
+    });
+  }, [dependency, autoScroll, scrollToBottom]);
 
-        scrollToBottom();
-    }, [
-        dependency,
-        autoScroll,
-        scrollToBottom,
-    ]);
+  return {
+    containerRef,
+    bottomRef,
+    autoScroll,
+    handleScroll,
+    scrollToBottom,
+    enableAutoScroll: () => {
+      setAutoScroll(true);
 
-    return {
-        containerRef,
-        bottomRef,
-        autoScroll,
-        handleScroll,
-        scrollToBottom,
-        enableAutoScroll: () =>
-            setAutoScroll(true),
-    };
+      scrollToBottom("smooth");
+    },
+  };
 }

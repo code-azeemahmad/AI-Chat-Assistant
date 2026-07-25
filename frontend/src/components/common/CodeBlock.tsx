@@ -1,6 +1,5 @@
-// src/components/common/CodeBlock.tsx
-
-import { useState } from "react";
+// src\components\common\CodeBlock.tsx
+import { memo, useState } from "react";
 
 import {
     Prism as SyntaxHighlighter,
@@ -12,22 +11,18 @@ import {
 
 interface CodeBlockProps {
     language?: string;
-
     value: string;
 }
 
-export default function CodeBlock({
+const CodeBlock = memo(function CodeBlock({
     language,
     value,
 }: CodeBlockProps) {
-    const [copied, setCopied] =
-        useState(false);
+    const [copied, setCopied] = useState(false);
 
     async function handleCopy() {
         try {
-            await navigator.clipboard.writeText(
-                value,
-            );
+            await navigator.clipboard.writeText(value);
 
             setCopied(true);
 
@@ -60,9 +55,7 @@ export default function CodeBlock({
                     hover:bg-neutral-600
                 "
             >
-                {copied
-                    ? "Copied!"
-                    : "Copy"}
+                {copied ? "Copied!" : "Copy"}
             </button>
 
             <SyntaxHighlighter
@@ -74,4 +67,6 @@ export default function CodeBlock({
             </SyntaxHighlighter>
         </div>
     );
-}
+});
+
+export default CodeBlock;

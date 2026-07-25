@@ -1,56 +1,35 @@
+// src/components/common/MarkdownRenderer.tsx
+
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import CodeBlock from "./CodeBlock";
+import StreamingCursor from "../chat/StreamingCursor";
 
 interface MarkdownRendererProps {
-    content: string;
+  content: string;
+  isStreaming?: boolean;
 }
 
 export default function MarkdownRenderer({
-    content,
-}: MarkdownRendererProps) {
-    return (
-        <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            components={{
-                code({
-                    className,
-                    children,
-                    ...props
-                }) {
-                    const match =
-                        /language-(\w+)/.exec(
-                            className ?? "",
-                        );
+  content,
+  isStreaming = false,
+}: MarkdownRendererProps) { 
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={{
+        p({ children }) {
+          return (
+            <p>
+              {children}
 
-                    const language =
-                        match?.[1];
-
-                    const value =
-                        String(children);
-
-                    if (!language) {
-                        return (
-                            <code
-                                className={className}
-                                {...props}
-                            >
-                                {children}
-                            </code>
-                        );
-                    }
-
-                    return (
-                        <CodeBlock
-                            language={language}
-                            value={value}
-                        />
-                    );
-                },
-            }}
-        >
-            {content}
-        </ReactMarkdown>
-    );
+              {isStreaming && <StreamingCursor />}
+            </p>
+          );
+        },
+      }}
+    >
+      {content}
+    </ReactMarkdown>
+  );
 }

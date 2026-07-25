@@ -148,6 +148,7 @@ export const useChatStore = create<ChatStore>()((set, get) => ({
     appendMessage(userMessage);
 
     const assistantMessage: ChatMessage = {
+        
       id: crypto.randomUUID(),
 
       role: ChatRole.ASSISTANT,

@@ -1,3 +1,4 @@
+// src\components\chat\MessageList.tsx
 import MessageBubble from "./MessageBubble";
 
 import type {
